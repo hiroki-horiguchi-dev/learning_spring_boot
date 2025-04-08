@@ -77,7 +77,7 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    5. この章で扱う Neo4j サーバーは、提供するアプリケーションで Neo4j DB が使われている前提で、このDB を楽に操作するためのライブラリという捉え方で良い
    6. また、3章の HATEOAS と組み合わせることで、例えばSNSアプリにおいては誰と誰がつながっているのか？などを表すハイパーリンクを作成することが用意となる
    7. この章では主にその方法について記述がある
-6. [Spring Data Rest API の児童生絵師(Gemfire)](https://spring.pleiades.io/guides/gs/accessing-gemfire-data-rest)
+6. [Spring Data Rest API の児童生絵師(Gemfire)](https://spring.pleiades.io/guides/gs/accessing-gemfire-data-rest) ✅
    1. ![img_14.png](img_14.png)
    2. 詳しくは大前提の Geode の構成あたりを参照
    3. そもそも Geodeはサーバー
@@ -131,5 +131,59 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
       3. `@Component` にしておくことで自動DIできるんだね
       4. アセンブラを使用して主役ルートリソースを取得する
    10. 進化する REST API (次ここから)
-       1. 要するに、変化に対応できる Rest な
+       1. DB というかモデルの構成が変わってもモデルから使わなくなったカラムを消すなって話
+   11. REST API へのリンクの構築
+       1. これまで、必要最低限のリンクを備えた進化可能な API を構築してきた
+       2. API を拡張し、クライアントにさらに優れたサービスを提供するには、アプリケーション状態のエンジンとしてハイパーメディアの概念を取り入れる必要がある
+          1. ずっとハイパーメディアの話してるね
+       3. それは何を意味するのか?ハンズオン
+          1. `Order.java` っていうモデルクラスを作って `Status` っていうオーダーの状態クラス作って、(`Order` API を叩く処理のステータスって命名にした方がいいと思うけど。。画面のステータスもあるんじゃないのかい？と思ったが、payroll パッケージにいるので問題ないか)
+          2. `Repository interface` 作ってコントローラー作って、通信処理と`NotFoundException` 作って、DBからの取得処理が書いてあるね
+          3. これで一連の MVC の MC が作れたねと
+          4. `すべてのコントローラーメソッドは、Spring HATEOAS の RepresentationModel サブクラスの 1 つを返し、ハイパーメディア（またはそのような型のラッパー）を適切にレンダリングします`
+          5. うんうん、Rest も守れているじゃんと
+          6. `OrderModelAssembler` 
+             1. リンク付きのオブジェクト（注文情報＋できる操作リンク）を作るのが OrderModelAssembler の役割。
+             2. 背景
+                注文（Order）の状態は、「進行中（IN_PROGRESS）」「完了（COMPLETED）」「キャンセル（CANCELLED）」とかがある
+             3. 問題点
+                状態（Status）を見てクライアント（アプリ側）が「この状態ならこのボタン出そう！」って自分で判断する作りにすると、
+                例えば新しい状態を追加したとき（例：「返品中」とか）、クライアントが壊れるリスクが出てくる
+                また、国によって表示テキスト（ロケール対応）を変えるとか、状態の名前を変えた場合も、クライアントがうまく動かなくなる可能性がある。
+             4. 解決策 → HATEOAS（Hypermedia as the Engine of Application State）を使う
+                クライアントが「状態を見て自分で推測する」のをやめさせて、
+                サーバー側から「今できる操作」をリンクで教えるようにする。
+             5. つまり、「キャンセルできるなら、キャンセルのリンクを送る」、「完了できるなら、完了のリンクを送る」
+             6. クライアント側は「リンクがあればボタンを出す」「リンクがなければ出さない」だけをすればいい→ これで、サーバー側だけ直せばよくなる。クライアントは壊れにくくなる！
+             7. ![img_16.png](img_16.png)
+             8. クライアントは当然 API を叩く側ね、API 仕様書とかにこういうのが載ってくるイメージかな
+             9. 勝手に状態を追加したので、コントローラーで当然 cancel と complete の URL を捌く処理を書くはずよな
+             10. OrderController で「キャンセル」操作を作成する <-- 当然やな
+             11. complete は難しくないと思うんだけど、cancel は非同期処理を適切に止めないといけないし、そっちが完了していたら購入処理が通ったことになるからハンドリング複雑そうだな
+             12. complete 
+                 1. ![img_17.png](img_17.png)
+                 2. DB に注文が存在するかどうか確認
+                 3. DB に注文があり、かつステータスが「進行中（IN_PROGRESS）」であるかを確認
+                 4. ステータスを「完了（COMPLETED）」に変更
+                 5. 変更した注文情報をデータベースに保存し、HATEOAS リンクを生成
+                 6. assembler.toModel(order) で注文データに関連するリンクを追加
+                 7. そして、それを ResponseEntity に入れて HTTP レスポンスとしてクライアントに返す
+                 8. ステータスが「進行中（IN_PROGRESS）」以外の場合、完了処理が無効なのでエラーを返している
+             13. Repository の具体的なコードが存在しないけど、まあわかるからよしとしよう
+   12. 要約
+       1. クライアントを壊さないために以下を徹底しよう
+          1. 古いフィールドを削除しない
+          2. rel ベースのリンクを使用する場合、クライアントは URI をハードコードする必要はない
+          3. 古いリンクはできる限り保持、URIを変更する必要がある場合でも、古いクライアントが新しい機能へのパスを持つようにrelを保持
+          4. ペイロードデータではリンクを使わずに、さまざまな状態駆動操作が利用可能な場合にクライアントに指示
+       2. これで、Spring を使用して RESTful サービスを構築する方法に関するチュートリアルを終了
+       3. このチュートリアルの各セクションは、単一の github リポジトリ内の個別のサブプロジェクトとして管理されます。 
+          1. nonrest — ハイパーメディアのないシンプルな Spring MVC アプリ 
+          2. rest — 各種リソースのHAL表現を備えた Spring MVC + Spring HATEOAS アプリ 
+          3. EVOLUTION — フィールドは進化しますが、下位互換性のために古いデータが保持される REST アプリ 
+          4. リンク— 有効な状態変更をクライアントに通知するために条件付きリンクが使用される REST アプリ
+       4. Spring HATEOAS の使用例をさらに表示するには、https://github.com/spring-projects/spring-hateoas-examples (英語) を参照
+       5. さらに詳しくは、Spring チームメイトの Oliver Drotbohm による次のビデオを参照
+       6. [REST Beyond the Obvious - API Design for Ever-Evolving Systems](https://www.youtube.com/watch?v=WDBUlu_lYas)
+
 8. [WebFlux REST API と WebClient](https://spring.pleiades.io/guides/gs/reactive-rest-service)
