@@ -82,7 +82,7 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    2. 詳しくは大前提の Geode の構成あたりを参照
    3. そもそも Geodeはサーバー
    4. Person クラスを例に、ローカルキャッシュから永続化までの how が書かれている
-7. [HATEOASでREST API の構築](https://spring.pleiades.io/guides/tutorials/rest)
+7. [HATEOASでREST API の構築](https://spring.pleiades.io/guides/tutorials/rest) ✅
    1. ![img_15.png](img_15.png)
    2. 概要
       1. 会社の従業員を管理する簡単な給与計算サービスの作成、授業インオブジェクトをH2インメモリデータベースに保存し、JPAを介してアクセスする
@@ -187,3 +187,33 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
        6. [REST Beyond the Obvious - API Design for Ever-Evolving Systems](https://www.youtube.com/watch?v=WDBUlu_lYas)
 
 8. [WebFlux REST API と WebClient](https://spring.pleiades.io/guides/gs/reactive-rest-service)
+   1. ![img_18.png](img_18.png)
+   2. WebFlux ハンドラーを作成する
+      1. Greeting モデルの作成
+      2. `GreetingHandler`
+         1. Handler を使ってって書いてあるけど、Android-Java の Handler ではなさそうやな
+         2. `Spring WebFlux`: 
+            1. Spring Framework の一部、非同期、リアクティブな Web アプリケーション を作成するためのフレームワーク
+            2. 特に、バックエンドでの非同期通信や、HTTP リクエスト/レスポンスの非同期処理に強みがある
+            3. `ServerRequest`: HTTP リクエストに関する情報を保持するクラス。リクエストパラメータやヘッダー、URI などを取得できる
+            4. `ServerResponse`: HTTP レスポンスを構築するクラス。レスポンスの内容、ステータスコード、ヘッダーなどを設定
+            5. `BodyInserters.fromValue()`: レスポンスのボディにデータを挿入するためのヘルパークラス. 基本 Json 
+         3. `Reactor (Mono と Flux)`
+            1. `Mono`: 0 か 1 の値を非同期で持つことができるストリーム、主に 1つのアイテムを返す非同期処理に使う
+            2. `Flux`: 0 以上のアイテムを非同期で持つことができるストリーム
+            3. 今回は Mono を採用
+      3. ルーター作成
+         1. プロキシについてちょっと復習
+            1. プロキシと言われるとネットワーク上のプロキシサーバーを想像してしまった
+            2. 間に噛むもの、という意味では同じ。ネットワーク上のプロキシはキャッシュ、アクセス制御とかを行うもの
+            3. 今回のプロキシは、クライアントと実際のオブジェクトの間に立って、振る舞いを変更、追加の処理を行うもの
+         2. 今までのチュートリアルはコントローラーでルーティングを定義していたようだが、今回はコントローラーから分離したみたい
+         3. `GreetingHandler` は、`@Component` ついているので自動DIされますよと
+         4. `/hello` でトラフィックをリッスンしてリアクティブハンドラークラスによって提供された値(hello なんとか)を返す
+      4. WebClient を作成
+         1. Client を作成しませっと
+         2. WebClient はノンブロッキング(非同期)、非同期処理でレスポンス待てまっせと
+         3. RestTemplate はブロッキング(同期)でっせと
+         4. ブロッキング発生に関してはモバイルと同じで、UIスレッドが止まるので UI 描画がなくなってユーザー困っちゃうよってことね
+      5. アプリケーションを実行可能にする
+         1. 次ここから
