@@ -1,15 +1,8 @@
 # 転職先で使うかもしれないので入門してみた
 ![img.png](images/img.png)
-- バッチ処理をやってくれるアノテーションから始める
 
-# [@Scheduled アノテーションで定期実行](https://spring.pleiades.io/guides/gs/scheduling-tasks)
+## [@Scheduled アノテーションで定期実行](https://spring.pleiades.io/guides/gs/scheduling-tasks)
 ![img_1.png](images/img_1.png)
-### スケジューリングを有効にする
-
-### スケジュールされらタスクを作成する
-### アプリケーションの実行
-### awaitility 依存関係を使用したテスト
-### アプリケーションの構築
 
 ## [ファイルのアップロード](https://spring.pleiades.io/guides/gs/uploading-files)
 ![img_2.png](images/img_2.png)
