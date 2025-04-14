@@ -62,7 +62,7 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    2. HATEOAS String の使い方の説明
    2. アクセスされたURLから新しいURLを作成して返せまっせって話だった
    3. つまり、HATEOASを使うことで、APIのインターフェースが動的に整備できるというのが重要なポイント(chatgpt)
-   4. ![img.png](../img.png)
+   4. ![img.png](images/img.png)
 4. [Spring Boot アプリケーションの構築
    ](https://spring.pleiades.io/guides/gs/spring-boot) ✅
    1. ![img_12.png](images/img_12.png)
