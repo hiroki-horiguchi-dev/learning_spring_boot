@@ -22,13 +22,13 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    2. Geode クライアントとは
       1. Spring Boot アプリが @ClientCacheApplication で立ち上がると、Geode サーバーに接続する「クライアント」アプリになる
       2. つまりどういう構成？
-      3. ![img_1.png](img_1.png)
+      3. ![img_1.png](images/img_1.png)
       4.  `ClientRegionShortcut.PROXY`：サーバー側にすべてのデータがあり、クライアントはキャッシュを持たない
       5. `ClientRegionShortcut.LOCAL`: クライアントにだけデータを保持
 4. Spring Boot 開発者が知っておくといいサーバー側トピック
-   1. ![img_2.png](img_2.png)
+   1. ![img_2.png](images/img_2.png)
 5. 補足: Geodeサーバ０を立ち上げるには？
-   1. ![img_3.png](img_3.png)
+   1. ![img_3.png](images/img_3.png)
 
 # 大前提その2 Tomcat サーバーについて
 1. Tomcat: Spring Boot に内蔵されているWebアプリケーションサーバー(正確にはServletコンテナ)
@@ -38,38 +38,38 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    1. Spring Boot では Tomcat を組み込みで使うのが標準的
    2. 通常は Tomcat をインストールしてWARファイルをデプロイするが、Tomcat をアプリの一部として組み込み、実行可能JARにパッケージする
 3. Spring Boot + Tomcat の構成図
-   1. ![img_4.png](img_4.png)
-   2. ![img_5.png](img_5.png)
-   3. ![img_6.png](img_6.png)
-   4. ![img_7.png](img_7.png)
-   5. ![img_8.png](img_8.png)
+   1. ![img_4.png](images/img_4.png)
+   2. ![img_5.png](images/img_5.png)
+   3. ![img_6.png](images/img_6.png)
+   4. ![img_7.png](images/img_7.png)
+   5. ![img_8.png](images/img_8.png)
 
 # RestApis
 1. [Building a RESTful Web Service
    ](https://spring.pleiades.io/guides/gs/rest-service) ✅
-   1. ![img_9.png](img_9.png)
+   1. ![img_9.png](images/img_9.png)
    2. ルーティングとコントローラーとみたいなところを学んだ
    2. URL のクエリパラメータ取る方法とかも学んだ
    3. @SpringBootApplication ちょっとむずい
       1. 3つくらい説明があったけど、すぐ理解できたのは自動 DI をするための仕組みぽいということ
       2. Bean という構成要素を Spring Boot に覚えさせるって説明だったね
 2. [RetTemplateでRestAPIの利用](https://spring.pleiades.io/guides/gs/consuming-rest)
-   1. ![img_10.png](img_10.png)
+   1. ![img_10.png](images/img_10.png)
    2. [quoters](https://github.com/spring-guides/quoters) をクローンしてローカル環境で実行する
    3. 作成した Spring Boot アプリケーションをクライアント側、quoters をサーバー側として Rest Api のレスポンス取得をする例
 3. [HATEOASでハイパーメディア駆動REST APIの作成](https://spring.pleiades.io/guides/gs/rest-hateoas) ✅
-   1. ![img_11.png](img_11.png)
+   1. ![img_11.png](images/img_11.png)
    2. HATEOAS String の使い方の説明
    2. アクセスされたURLから新しいURLを作成して返せまっせって話だった
    3. つまり、HATEOASを使うことで、APIのインターフェースが動的に整備できるというのが重要なポイント(chatgpt)
-   4. ![img.png](img.png)
+   4. ![img.png](../img.png)
 4. [Spring Boot アプリケーションの構築
    ](https://spring.pleiades.io/guides/gs/spring-boot) ✅
-   1. ![img_12.png](img_12.png)
+   1. ![img_12.png](images/img_12.png)
    2. コントローラーに設定したルーティングで適当なページの表示
    3. 及びそのリンクに対する単体テスト、結合テストとか
 5. [Spring Data Rest API の自動生成(Neo4j)](https://spring.pleiades.io/guides/gs/accessing-neo4j-data-rest) ✅
-   1. ![img_13.png](img_13.png)
+   1. ![img_13.png](images/img_13.png)
    2. [いきなりグラフデータベース～人生で初めてNeo4jを触ってみた（Cypher入門）
       ](https://recruit.gmo.jp/engineer/jisedai/blog/graph-database-neo4j-try-cypher/)
    3. Neo4j: SNS(linkedin のような)に使われるノードと矢印を用いたデータベース構造をDB
@@ -78,12 +78,12 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
    6. また、3章の HATEOAS と組み合わせることで、例えばSNSアプリにおいては誰と誰がつながっているのか？などを表すハイパーリンクを作成することが用意となる
    7. この章では主にその方法について記述がある
 6. [Spring Data Rest API の児童生絵師(Gemfire)](https://spring.pleiades.io/guides/gs/accessing-gemfire-data-rest) ✅
-   1. ![img_14.png](img_14.png)
+   1. ![img_14.png](images/img_14.png)
    2. 詳しくは大前提の Geode の構成あたりを参照
    3. そもそも Geodeはサーバー
    4. Person クラスを例に、ローカルキャッシュから永続化までの how が書かれている
 7. [HATEOASでREST API の構築](https://spring.pleiades.io/guides/tutorials/rest) ✅
-   1. ![img_15.png](img_15.png)
+   1. ![img_15.png](images/img_15.png)
    2. 概要
       1. 会社の従業員を管理する簡単な給与計算サービスの作成、授業インオブジェクトをH2インメモリデータベースに保存し、JPAを介してアクセスする
       2. インターネット経由でアクセスできるようにするもの(Spring MVCレイヤーと呼ばれるもの)でこれをラップする
@@ -155,13 +155,13 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
                 サーバー側から「今できる操作」をリンクで教えるようにする。
              5. つまり、「キャンセルできるなら、キャンセルのリンクを送る」、「完了できるなら、完了のリンクを送る」
              6. クライアント側は「リンクがあればボタンを出す」「リンクがなければ出さない」だけをすればいい→ これで、サーバー側だけ直せばよくなる。クライアントは壊れにくくなる！
-             7. ![img_16.png](img_16.png)
+             7. ![img_16.png](images/img_16.png)
              8. クライアントは当然 API を叩く側ね、API 仕様書とかにこういうのが載ってくるイメージかな
              9. 勝手に状態を追加したので、コントローラーで当然 cancel と complete の URL を捌く処理を書くはずよな
              10. OrderController で「キャンセル」操作を作成する <-- 当然やな
              11. complete は難しくないと思うんだけど、cancel は非同期処理を適切に止めないといけないし、そっちが完了していたら購入処理が通ったことになるからハンドリング複雑そうだな
              12. complete 
-                 1. ![img_17.png](img_17.png)
+                 1. ![img_17.png](images/img_17.png)
                  2. DB に注文が存在するかどうか確認
                  3. DB に注文があり、かつステータスが「進行中（IN_PROGRESS）」であるかを確認
                  4. ステータスを「完了（COMPLETED）」に変更
@@ -187,7 +187,7 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
        6. [REST Beyond the Obvious - API Design for Ever-Evolving Systems](https://www.youtube.com/watch?v=WDBUlu_lYas)
 
 8. [WebFlux REST API と WebClient](https://spring.pleiades.io/guides/gs/reactive-rest-service)
-   1. ![img_18.png](img_18.png)
+   1. ![img_18.png](images/img_18.png)
    2. WebFlux ハンドラーを作成する
       1. Greeting モデルの作成
       2. `GreetingHandler`
@@ -216,12 +216,12 @@ chatGpt に Spring Boot を使う上で前提となる知識を教えてもら�
          3. RestTemplate はブロッキング(同期)でっせと
          4. ブロッキング発生に関してはモバイルと同じで、UIスレッドが止まるので UI 描画がなくなってユーザー困っちゃうよってことね
       5. アプリケーションを実行可能にする
-         1. ![img_19.png](img_19.png)
+         1. ![img_19.png](images/img_19.png)
          2. block 関数でスレッドを停止して待っている感じだな
          3. Kotlin Coroutine の rubBlocking みたいなものと理解した
-         4. ![img_20.png](img_20.png)
+         4. ![img_20.png](images/img_20.png)
       6. アプリケーションをテストする
-         1. ![img_21.png](img_21.png)
+         1. ![img_21.png](images/img_21.png)
          2. `@SpringBootTest(webEnvironment = RANDOM_PORT)`
             1. → 本物のSpringBootサーバーをランダムなポートで起動してテストする！（ポートかぶり防止）なるほどね
             2. なるほどね、別途サーバーを立ててクライアント役をやらせて `/hello` が動作するかをテストしているってことね
